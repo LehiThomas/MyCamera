@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, TouchableHighlight, 
-         CameraRoll, Image, Dimensions, ScrollView, } from 'react-native';
+         CameraRoll, Image, Dimensions, ScrollView } from 'react-native';
 
 export default class GalleryPage extends Component {
   constructor(props) {
@@ -21,8 +21,7 @@ export default class GalleryPage extends Component {
   }
 
   componentDidMount(){
-    this.getPhotos();      
-    console.log(this.state);
+    this.getPhotos();
   }
 
   getPhotos = () => {
@@ -36,7 +35,7 @@ export default class GalleryPage extends Component {
       this.setState({
         isCameraLoaded: true,
         photos: images
-      }, () => console.log(this.state));
+      }, () => console.log("Images gathered"));
     })
     .catch(function(error) {
       console.log('There has been a problem with your gallery: ' + error.message);
@@ -45,40 +44,37 @@ export default class GalleryPage extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.scrollView}>
-      {
-        this.state.photos.map((p, i) => {
-          return (
-              <Image
-                source={{uri: `file://${p.uri}`}}
-              />
-          )
-        })
-      }
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+        {
+          this.state.photos.map((p, i) => {
+            return (
+                <Image
+                  key={i}
+                  style={styles.img}
+                  source={{uri: p.uri}}
+                />
+            )
+          })
+        }
+        </ScrollView>
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  modalContainer: {
-    paddingTop: 20,
-    flex: 1
   },
   scrollView: {
     flexWrap: 'wrap',
     flexDirection: 'row'
   },
-  shareButton: {
-    position: 'absolute',
-    padding: 10,
-    bottom: 0,
-    left: 0
+  img: {
+    width: Dimensions.get('window').width/3,
+    height: Dimensions.get('window').width/3
   }
 })
 
